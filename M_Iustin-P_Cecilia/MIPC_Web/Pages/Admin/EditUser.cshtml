@@ -1,0 +1,20 @@
+﻿@page "{id?}"
+@model EditUserModel
+@{
+    ViewData["Title"] = "Edit user";
+}
+
+<h1>Edit User</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input readonly type="email" class="form-control" id="Email" name="Email" value="@Model.User.Email" required />
+    </div>
+    <div class="form-group">
+        <label for="Role">Role</label>
+        <select class="form-control" asp-for="User.Role" asp-items="Model.RoleOptions" required>
+        </select>
+    </div>  
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

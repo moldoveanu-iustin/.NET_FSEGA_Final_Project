@@ -1,0 +1,54 @@
+﻿@page
+@model DashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <!-- Section for Total Accounts -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Total Accounts
+            </div>
+            <div class="card-body">
+                <h2>@Model.TotalAccounts</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section for List of Accounts -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                User Accounts
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                <td>
+                                    <a href="/Admin/EditUser/@user.Id" class="btn btn-warning btn-sm">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

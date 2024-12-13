@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MIPC_Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MIPC_Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">MIPC_Web</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <!-- Check if the user is authenticated -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>Welcome, @User.Identity.Name!</p>  <!-- Display the user's name if authenticated -->
+                        
+                        @if (User.IsInRole("Client"))
+                        {
+                            <p>You are logged in as: Client</p>
+                        }
+                        else if (User.IsInRole("Admin"))
+                        {
+                            <p>You are logged in as: Admin</p>
+                        }
+                        else
+                        {
+                            <p>You are logged in with an unknown role</p>
+                        }
+
+
+                        <a href="/Identity/Account/Logout" class="btn btn-secondary" style="color: white;">Logout</a>
+                    }
+                    else
+                    {
+                        <!-- Show Login and Register buttons if the user is not authenticated -->
+                        <p>
+                            <a href="/Identity/Account/Login" class="btn btn-primary">Login</a>
+                            <a href="/Identity/Account/Register" class="btn btn-secondary" style="color: white;">Register</a>
+                        </p>
+                    }
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - MIPC_Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
