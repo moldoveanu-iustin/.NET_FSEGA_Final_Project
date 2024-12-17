@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MIPC_Web.Pages.Admin
 {
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Admin")]
     public class DashboardModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -23,8 +23,12 @@ namespace MIPC_Web.Pages.Admin
             _context = context;
         }
 
-        public int TotalAccounts {  get; set; }
-        public List<UserInfo> Users {  get; set; }
+        public int TotalUsers { get; set; }
+        public int TotalClients { get; set; }
+        public int TotalSoferi { get; set; }
+        public int TotalAdmins { get; set; }
+        public int TotalCars { get; set; }
+        public List<UserInfo> Users { get; set; }
 
         public class UserInfo
         {
@@ -35,9 +39,13 @@ namespace MIPC_Web.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            TotalAccounts = _userManager.Users.Count();
             var userList = await _userManager.Users.ToListAsync();
+
             Users = new List<UserInfo>();
+            TotalUsers = userList.Count;
+            TotalClients = 0;
+            TotalSoferi = 0;
+            TotalAdmins = 0;
 
             foreach (var user in userList)
             {
@@ -45,10 +53,24 @@ namespace MIPC_Web.Pages.Admin
                 Users.Add(new UserInfo
                 {
                     Id = user.Id,
-                    Email = user.Email,
+                    Email = user.UserName,
                     Role = role
                 });
+                if (role == "Client")
+                {
+                    TotalClients++;
+                }
+                else if (role == "Sofer")
+                {
+                    TotalSoferi++;
+                }
+                else if (role == "Admin")
+                {
+                    TotalAdmins++;
+                }
             }
+            Users = Users.OrderBy(u => u.Role).ToList();
+            TotalCars = await _context.Masini.CountAsync();
         }
 
         private async Task<string> GetUserRole(IdentityUser user)

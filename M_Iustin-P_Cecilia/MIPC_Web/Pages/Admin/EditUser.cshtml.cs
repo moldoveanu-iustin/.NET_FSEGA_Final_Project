@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MIPC_Web.Pages.Admin
 {
-    [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Admin")]
     public class EditUserModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -47,16 +47,14 @@ namespace MIPC_Web.Pages.Admin
             User = new UserInfo
             {
                 Id = user.Id,
-                Email = user.Email,
+                Email = user.UserName,
                 Role = roles.FirstOrDefault() ?? "No Role"
             };
-
-            // Dynamically fetch role options
             var rolesFromDb = await _roleManager.Roles.ToListAsync();
             RoleOptions = rolesFromDb.Select(r => new SelectListItem
             {
                 Text = r.Name,
-                Value = r.Name
+                Value = r.Name  
             }).ToList();
 
             return Page();
@@ -98,9 +96,7 @@ namespace MIPC_Web.Pages.Admin
                 ModelState.AddModelError("", "Failed to update user.");
                 return Page();
             }
-
-            // After successful update, redirect to a meaningful page (e.g., dashboard or user list)
-            return RedirectToPage("/Admin/UserList"); // or /Admin/Dashboard, depending on your app
+            return RedirectToPage("/Admin/Dashboard");
         }
     }
 }

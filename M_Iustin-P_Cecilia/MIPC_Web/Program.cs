@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MIPC_DB")));
 
-// Use AddIdentity (for more customization)
+// Use AddIdentity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -28,8 +28,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Identity/Account/Login";  // Define where users will be redirected to login
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";  // Define where users will be redirected if access is denied
+    options.LoginPath = "/Identity/Account/Login";  // redirect to login
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";  // acces denied
 });
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -39,9 +39,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    if (!await roleManager.RoleExistsAsync("Client"))
+    
+    var roles = new[] { "Client", "Admin", "Sofer" };
+
+    foreach (var role in roles)
     {
-        await roleManager.CreateAsync(new IdentityRole("Client"));
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
     }
 }
 

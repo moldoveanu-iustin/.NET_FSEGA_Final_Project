@@ -14,13 +14,62 @@
                 Total Accounts
             </div>
             <div class="card-body">
-                <h2>@Model.TotalAccounts</h2>
+                <h2>@Model.TotalUsers</h2>
             </div>
         </div>
     </div>
 
-    <!-- Section for List of Accounts -->
+    <!-- Section for Total Cars -->
     <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Total Cars
+            </div>
+            <div class="card-body">
+                <h2>@Model.TotalCars</h2>
+                <a href="/Admin/AddCar" class="btn btn-primary">Add Car</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Section for Role Counts -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Clients
+            </div>
+            <div class="card-body">
+                <h2>@Model.TotalClients</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Drivers (Soferi)
+            </div>
+            <div class="card-body">
+                <h2>@Model.TotalSoferi</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Admins
+            </div>
+            <div class="card-body">
+                <h2>@Model.TotalAdmins</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Section for List of Accounts -->
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 User Accounts
@@ -45,10 +94,15 @@
                                 </td>
                             </tr>
                         }
+                        @if (!Model.Users.Any())
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center">No users found.</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-

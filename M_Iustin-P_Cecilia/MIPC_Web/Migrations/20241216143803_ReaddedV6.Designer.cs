@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIPC_Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241216143803_ReaddedV6")]
+    partial class ReaddedV6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,13 +144,16 @@ namespace MIPC_Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ID_Rezervare");
+                        .HasColumnName("ID_Firma");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId1")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DataRezervare")
                         .HasColumnType("datetime2");
@@ -176,13 +182,9 @@ namespace MIPC_Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId1");
 
                     b.HasIndex("SoferId");
 
@@ -435,9 +437,9 @@ namespace MIPC_Web.Migrations
 
             modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Client")
+                    b.HasOne("MIPC_Web.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
+                        .HasForeignKey("ClientId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

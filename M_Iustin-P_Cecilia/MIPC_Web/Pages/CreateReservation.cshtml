@@ -1,0 +1,78 @@
+﻿@page
+@model MIPC_Web.Pages.CreateReservationModel
+@{
+    ViewData["Title"] = "Plan Your Trip";
+}
+
+<h2>Plan your trip NOW: </h2>
+<div class="col-md-4">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>@Model.Car.Marca @Model.Car.Model</h5>
+        </div>
+        <div class="card-body">
+            <div class="text-center">
+             <img src="/images/@Model.Car.imagine1" class="img-fluid mb-2" alt="Car Image 1" height="150px" width="250px" />
+             @if (!string.IsNullOrEmpty(@Model.Car.imagine2))
+                {
+                    <img src="/images/@Model.Car.imagine2" class="img-fluid" alt="Car Image 2" height="150px" width="250px" />
+                }
+            </div>
+                <p><strong>An fabricatie:</strong> @Model.Car.AnFabricatie</p>
+                <p><strong>Numar inmatriculare:</strong> @Model.Car.NumarInmatriculare</p>
+                <p><strong>Pret per km:</strong> @Model.Car.PretPerKm RON</p>
+
+                @if (Model.Car.PreluataDeSofer == true)
+                {
+                    <hr />
+                    <h4><b>Detalii sofer</b></h4>
+                    <p><strong>Nume:</strong> @Model.Sofer.Nume</p>
+                    <p><strong>Prenume:</strong> @Model.Sofer.Prenume</p>
+                    <p><strong>Telefon:</strong> @Model.Sofer.Telefon</p>
+                    <p><strong>Email:</strong> @Model.Sofer.Email</p>
+                    <img src="/images/@Model.Sofer.PozaProfil" class="img-fluid" alt="Profile picture" height="100px" width="100px" />
+                }
+                else
+                {
+                    <p><strong>Sofer:</strong> Not assigned</p>
+                } 
+        </div>
+    </div>
+    <form method="post">
+        <div>
+            <label for="startDate">Select Start Date:</label>
+            <input type="date" id="startDate" name="DataStartRezervare" value="@DateTime.Now" required />
+        </div>
+
+        <div>
+            <label for="endDate">Select End Date:</label>
+            <input type="date" id="endDate" name="DataStopRezervare" value="@DateTime.Now" required />
+        </div>
+        <div>
+            <label for="startLocation">Start Location</label>
+            <input id="startLocation" name="LocatiePlecare" class="form-control" required />
+        </div>
+        <div>
+            <label for="stopLocation">Stop Location</label>
+            <input id="stopLocation" name="LocatieSosire" class="form-control" required />
+        </div>
+        <div>
+            <label for="totalDistance">Total Distance (km)</label>
+            <input id="totalDistance" name="Distance" class="form-control" readonly />
+        </div>
+        <div>
+            <label for="price">Price (RON)</label>
+            <input id="price" name="Price" class="form-control" readonly />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+
+<!-- Google Maps API -->
+<input type="hidden" id="pricePerKm" value="@Model.PretPerKm" />
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIMehSWnzPsLtvjp5JXom0RoA5WED0Wro&libraries=places,geometry&callback=initAutocomplete"
+        async
+        defer>
+</script>
+<script src="/js/createReservation.js"></script>

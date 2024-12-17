@@ -1,0 +1,39 @@
+﻿@page
+@model AddCarModel
+@{
+    ViewData["Title"] = "Add Car";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Marca">Marca</label>
+        <input type="text" id="Marca" name="Input.Marca" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Model">Model</label>
+        <input type="text" id="Model" name="Input.Model" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="AnFabricatie">An Fabricatie</label>
+        <input type="number" id="AnFabricatie" name="Input.AnFabricatie" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="NumarInmatriculare">Numar Inmatriculare</label>
+        <input type="text" id="NumarInmatriculare" name="Input.NumarInmatriculare" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="PretPerKm">Pret per KM</label>
+        <input type="number" id="PretPerKm" name="Input.PretPerKm" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="Image1">Image 1</label>
+        <input type="text" id="Image1" name="Input.Imagine1" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Image2">Image 2</label>
+        <input type="text" id="Image2" name="Input.Imagine2" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Car</button>
+</form>

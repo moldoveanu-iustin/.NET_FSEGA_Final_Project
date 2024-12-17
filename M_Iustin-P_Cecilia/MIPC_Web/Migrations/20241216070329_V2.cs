@@ -5,19 +5,25 @@
 namespace MIPC_Web.Migrations
 {
     /// <inheritdoc />
-    public partial class NeededV3 : Migration
+    public partial class V2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Utilizatori");
+            migrationBuilder.AddColumn<string>(
+                name: "Prenume",
+                table: "Soferi",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            
+            migrationBuilder.DropColumn(
+                name: "Prenume",
+                table: "Soferi");
         }
     }
 }

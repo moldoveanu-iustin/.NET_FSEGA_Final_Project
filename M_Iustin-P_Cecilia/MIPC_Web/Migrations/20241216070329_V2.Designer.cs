@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIPC_Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241216070329_V2")]
+    partial class V2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,25 +144,18 @@ namespace MIPC_Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ID_Rezervare");
+                        .HasColumnName("ID_Firma");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataCursa")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataRezervare")
                         .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataStartCursa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataStopCursa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("DistantaTotala")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("LocatiePlecare")
                         .IsRequired()
@@ -172,21 +168,19 @@ namespace MIPC_Web.Migrations
                     b.Property<decimal>("PretTotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("SoferId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("SoferId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SoferId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("SoferId");
+                    b.HasIndex("SoferId1");
 
-                    b.ToTable("Rezervare");
+                    b.ToTable("Rezervari");
                 });
 
             modelBuilder.Entity("MIPC_Web.Models.Sofer", b =>
@@ -202,10 +196,6 @@ namespace MIPC_Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nume")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PozaProfil")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -435,7 +425,7 @@ namespace MIPC_Web.Migrations
 
             modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Client")
+                    b.HasOne("MIPC_Web.Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,9 +433,7 @@ namespace MIPC_Web.Migrations
 
                     b.HasOne("MIPC_Web.Models.Sofer", "Sofer")
                         .WithMany()
-                        .HasForeignKey("SoferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SoferId1");
 
                     b.Navigation("Client");
 

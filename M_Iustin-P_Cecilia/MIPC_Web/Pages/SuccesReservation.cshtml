@@ -1,0 +1,17 @@
+﻿@page
+@model SuccesReservationModel
+@{
+    ViewData["Title"] = "Your ride is confirmed!";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-success">
+    <strong>Success!</strong> Your reservation has been completed successfully.
+</div>
+
+<p>Your reservation ID is: <strong>@Model.ReservationId</strong> | You can see the status of your order on your profile page</p>
+
+<p>Thank you for choosing our service!</p>
+
+<a class="btn btn-primary" href="/Profile">Go to Reservations</a>

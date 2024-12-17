@@ -12,8 +12,12 @@ namespace MIPC_Web.Models
         public string NumarInmatriculare { get; set; }
         public decimal PretPerKm { get; set; }
 
-        // Relație cu Firma
+        // Relatie cu Firma
         public int FirmaId { get; set; }
         public Firma Firma { get; set; }
+
+        public string imagine1 { get; set; }
+        public string imagine2 { get; set; }
+        public bool PreluataDeSofer { get; set; }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIPC_Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241213120552_NeededV2")]
-    partial class NeededV2
+    [Migration("20241216143908_V7")]
+    partial class V7
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,8 +118,19 @@ namespace MIPC_Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("PreluataDeSofer")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("PretPerKm")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("imagine1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("imagine2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -128,54 +139,10 @@ namespace MIPC_Web.Migrations
                     b.ToTable("Masini");
                 });
 
-            modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID_Firma");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataCursa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataRezervare")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocatiePlecare")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocatieSosire")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PretTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("SoferId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("SoferId");
-
-                    b.ToTable("Rezervari");
-                });
-
             modelBuilder.Entity("MIPC_Web.Models.Sofer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -185,6 +152,10 @@ namespace MIPC_Web.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nume")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PozaProfil")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -201,32 +172,6 @@ namespace MIPC_Web.Migrations
                     b.HasIndex("MasinaId");
 
                     b.ToTable("Soferi");
-                });
-
-            modelBuilder.Entity("MIPC_Web.Models.Utilizator", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumeUtilizator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Parola")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Rol")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Utilizatori");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -436,25 +381,6 @@ namespace MIPC_Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Firma");
-                });
-
-            modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
-                {
-                    b.HasOne("MIPC_Web.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIPC_Web.Models.Sofer", "Sofer")
-                        .WithMany()
-                        .HasForeignKey("SoferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Sofer");
                 });
 
             modelBuilder.Entity("MIPC_Web.Models.Sofer", b =>

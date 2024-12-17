@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIPC_Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241216143624_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,59 +137,6 @@ namespace MIPC_Web.Migrations
                     b.HasIndex("FirmaId");
 
                     b.ToTable("Masini");
-                });
-
-            modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID_Rezervare");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DataRezervare")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataStartCursa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DataStopCursa")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal?>("DistantaTotala")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("LocatiePlecare")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocatieSosire")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PretTotal")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("SoferId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("SoferId");
-
-                    b.ToTable("Rezervare");
                 });
 
             modelBuilder.Entity("MIPC_Web.Models.Sofer", b =>
@@ -431,25 +381,6 @@ namespace MIPC_Web.Migrations
                         .IsRequired();
 
                     b.Navigation("Firma");
-                });
-
-            modelBuilder.Entity("MIPC_Web.Models.Rezervare", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MIPC_Web.Models.Sofer", "Sofer")
-                        .WithMany()
-                        .HasForeignKey("SoferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Sofer");
                 });
 
             modelBuilder.Entity("MIPC_Web.Models.Sofer", b =>

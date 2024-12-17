@@ -1,0 +1,193 @@
+﻿@page
+@model ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Profile Information
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <!-- Email (Always visible for all roles) -->
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" value="@Model.CurrentUser.UserName" readonly />
+                    </div>
+
+                    <!-- User Id (Always visible for all roles) -->
+                    <div class="form-group">
+                        <label>User ID</label>
+                        <input type="text" class="form-control" value="@Model.CurrentUser.Id" readonly />
+                    </div>
+
+                    @if (Model.CurrentRole == "Sofer")
+                    {
+                        <!-- Sofer Information: Nume, Prenume, Telefon -->
+                        <div class="form-group">
+                            <label>Nume</label>
+                            <input type="text" class="form-control" asp-for="Nume" />
+                        </div>
+                        <div class="form-group">
+                            <label>Prenume</label>
+                            <input type="text" class="form-control" asp-for="Prenume" />
+                        </div>
+                        <div class="form-group">
+                            <label>Telefon</label>
+                            <input type="text" class="form-control" asp-for="Telefon" />
+                        </div>
+                        @if (Model.CurrentCar == null)
+                        {
+                            <div class="form-group">
+                                <label>Select Car</label>
+                                <select class="form-control" asp-for="CarId">
+                                    <option value="">Select a car</option>
+                                    @foreach (var car in Model.Cars)
+                                    {
+                                        <option value="@car.Id">@car.Marca @car.Model</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.CurrentRole == "Sofer")
+{
+    @if (Model.CurrentCar != null)
+    {
+        <div class="card mt-3">
+            <div class="card-header">
+                Assigned Car Information
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img src="~/Images/@Model.CurrentCar.imagine1" alt="Car Image 1" class="img-fluid" height="150px" width="250px"/>
+                        <img src="~/Images/@Model.CurrentCar.imagine2" alt="Car Image 1" class="img-fluid" height="150px" width="250px"/>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Marca:</strong> @Model.CurrentCar.Marca</li>
+                            <li class="list-group-item"><strong>Model:</strong> @Model.CurrentCar.Model</li>
+                            <li class="list-group-item"><strong>An Fabricatie:</strong> @Model.CurrentCar.AnFabricatie</li>
+                            <li class="list-group-item"><strong>Numar Inmatriculare:</strong> @Model.CurrentCar.NumarInmatriculare</li>
+                            <li class="list-group-item"><strong>Pret per Km:</strong> @Model.CurrentCar.PretPerKm RON</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.CurrentCar == null)
+    {
+        <div class="alert alert-warning">
+            You have not been assigned a car yet.
+        </div>
+    }
+
+}
+
+<!-- Display My Reservations for Client or Sofer -->
+<div class="card mt-3">
+    <div class="card-header">
+        My Reservations
+    </div>
+    <div class="card-body">
+        @if (Model.Reservations.Any())
+        {
+            <ul class="list-group">
+                @foreach (var reservation in Model.Reservations)
+                {
+                    <li class="list-group-item">
+                        <strong> ID rezervare:</strong> @reservation.Id
+                        <br />
+                        <strong>Data efectuare comanda:</strong> @reservation.DataRezervare
+                        <br />
+                        <strong>Locatie plecare:</strong> @reservation.LocatiePlecare
+                        <br />
+                        <strong>Locatie sosire:</strong> @reservation.LocatieSosire
+                        <br />
+                        <strong>Distanta cursa:</strong> @reservation.DistantaTotala km
+                        <br />
+                        <strong>Pret total:</strong> @reservation.PretTotal RON
+                        <br />
+                        <strong>Status:</strong> @reservation.Status
+                        <br />
+                        <!-- Actions for Sofer -->
+                        @if (Model.CurrentRole == "Sofer" && reservation.Status == "In asteptare")
+                        {
+                            <form method="post" asp-page-handler="AcceptRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form method="post" asp-page-handler="DeclineRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                            </form>
+                        }
+                    </li>
+
+
+
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>@reservation.Sofer.Masina.Marca @reservation.Sofer.Masina.Model</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <img src="/images/@reservation.Sofer.Masina.imagine1" class="img-fluid mb-2" alt="Car Image 1" height="150px" width="250px" />
+                                    @if (!string.IsNullOrEmpty(@reservation.Sofer.Masina.imagine2))
+                                    {
+                                        <img src="/images/@reservation.Sofer.Masina.imagine2" class="img-fluid" alt="Car Image 2" height="150px" width="250px" />
+                                    }
+                                </div>
+                                <p><strong>An fabricatie:</strong> @reservation.Sofer.Masina.AnFabricatie</p>
+                                <p><strong>Numar inmatriculare:</strong> @reservation.Sofer.Masina.NumarInmatriculare</p>
+                                <p><strong>Pret per km:</strong> @reservation.Sofer.Masina.PretPerKm RON</p>
+
+                                @if (@reservation.Sofer.Masina.PreluataDeSofer == true)
+                                {
+                                    <hr />
+                                    <h4><b>Detalii sofer</b></h4>
+                                    <p><strong>Nume:</strong> @reservation.Sofer.Nume</p>
+                                    <p><strong>Prenume:</strong> @reservation.Sofer.Prenume</p>
+                                    <p><strong>Telefon:</strong> @reservation.Sofer.Telefon</p>
+                                    <p><strong>Email:</strong> @reservation.Sofer.Email</p>
+                                    <img src="/images/@reservation.Sofer.PozaProfil" class="img-fluid" alt="Profile picture" height="100px" width="100px" />
+                                }
+                                else
+                                {
+                                    <p><strong>Sofer:</strong> Not assigned</p>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No reservations found.</p>
+        }
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@page
+@model AllCarsModel
+@{
+    ViewData["Title"] = "All cars";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    @foreach (var car in Model.Cars)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>@car.Marca @car.Model</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="/images/@car.Imagine1" class="img-fluid mb-2" alt="Car Image 1" height="150px" width="250px"/>
+                        @if (!string.IsNullOrEmpty(car.Imagine2))
+                        {
+                            <img src="/images/@car.Imagine2" class="img-fluid" alt="Car Image 2" height="150px" width="250px"/>
+                        }
+                    </div>
+                    <p><strong>An fabricatie:</strong> @car.AnFabricatie</p>
+                    <p><strong>Numar inmatriculare:</strong> @car.NumarInmatriculare</p>
+                    <p><strong>Pret per km:</strong> @car.PretPerKm RON</p>
+
+                    @if (car.Sofer != null)
+                    {
+                        <hr />
+                        <h4><b>Detalii sofer</b></h4>
+                        <p><strong>Nume:</strong> @car.Sofer.Nume</p>
+                        <p><strong>Prenume:</strong> @car.Sofer.Prenume</p>
+                        <p><strong>Telefon:</strong> @car.Sofer.Telefon</p>
+                        <p><strong>Email:</strong> @car.Sofer.Email</p>
+                        <img src="/images/@car.Sofer.PozaProfil" class="img-fluid" alt="Profile picture" height="100px" width="100px" />
+                    }
+                    else
+                    {
+                        <p><strong>Sofer:</strong> Not assigned</p>
+                    }
+
+                    @if (User.IsInRole("Client"))
+                    {
+                        <a class="btn btn-primary mt-3"
+                           href="/CreateReservation?carId=@car.Id">Plan your trip with: @car.Model
+                        </a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+</div>

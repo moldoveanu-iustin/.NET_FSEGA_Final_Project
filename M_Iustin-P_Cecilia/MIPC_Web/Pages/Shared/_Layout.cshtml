@@ -23,28 +23,40 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/AllCars">Plan your trip</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Dashboard">Admin dashboard</a>
                         </li>
                     </ul>
                 </div>
 
                 <div>
-                    <!-- Check if the user is authenticated -->
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <p>Welcome, @User.Identity.Name!</p>  <!-- Display the user's name if authenticated -->
+                        <p>Welcome, @User.Identity.Name!</p>
                         
                         @if (User.IsInRole("Client"))
                         {
                             <p>You are logged in as: Client</p>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
                         }
                         else if (User.IsInRole("Admin"))
                         {
                             <p>You are logged in as: Admin</p>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
+
+                        }
+                        else if (User.IsInRole("Sofer"))
+                        {
+                            <p>You are logged in as: Sofer</p>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
+
                         }
                         else
                         {
                             <p>You are logged in with an unknown role</p>
+
                         }
 
 
@@ -52,7 +64,6 @@
                     }
                     else
                     {
-                        <!-- Show Login and Register buttons if the user is not authenticated -->
                         <p>
                             <a href="/Identity/Account/Login" class="btn btn-primary">Login</a>
                             <a href="/Identity/Account/Register" class="btn btn-secondary" style="color: white;">Register</a>
