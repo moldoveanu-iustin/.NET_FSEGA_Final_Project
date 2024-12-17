@@ -1,0 +1,3 @@
+*Project V2:
+
+Aplicatia web: Au fost dezvoltate noi functionalitati ale aplicatiei precum: register/login, adaugare 3 roluri (Client, Sofer, Admin) cu diferite permisiuni, pagina cu toate vehiculele disponibile pentru transport, posibilitate creare comanda si ulterior vizionarea detaliilor acesteia in contul de Client de pe care s-a efectuat aceasta, dar si de pe contul de Sofer al acelei masini, cu posibilitate de acceptare/refuzare a comenzii. De asemenea a fost adaugat si un admin dashboard cu mici detalii despre numarul de conturi, de masini, etc.
