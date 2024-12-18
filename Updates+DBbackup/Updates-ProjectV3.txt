@@ -1,0 +1,5 @@
+*Project V3:
+
+- A fost adaugata o pagina de notificari. Notificarile sunt primite la crearea unei rezervari/la acceptarea unei rezervari de catre un sofer. In header langa butonul care trimite utilizatorul la pagina de notificari a fost adaugat un "badge" care indica numarul notificarilor necitite. In pagina de notificari utilizatorul are posibilitatea sa vad mesajul si data notificarii, dar si sa marcheze notificarea ca citita/necitita
+- De asemenea, au fost modificate interfetele a 90% din paginile proiectului, oferindu-i un aspect mai frumos. Paginile de admin au ramas default.
+-Project V3 ofera o prima versiune finala a proiectului web, urmand ulterior sa se implementeze proiectul MAUI.
