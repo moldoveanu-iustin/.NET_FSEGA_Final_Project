@@ -36,7 +36,7 @@ namespace MIPC_Web.Pages
         public string Telefon { get; set; }
 
         [BindProperty]
-        public int CarId { get; set; 
+        public int CarId { get; set; } 
 
         public List<Masina> Cars { get; set; }
         public Masina CurrentCar { get; set; }
@@ -179,6 +179,19 @@ namespace MIPC_Web.Pages
             if (rezervare != null && rezervare.Status == "In asteptare")
             {
                 rezervare.Status = "Respinsa";
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteRideAsync(int rezervareId)
+        {
+            var rezervare = await _context.Rezervari.FindAsync(rezervareId);
+
+            if (rezervare != null && rezervare.Status == "In asteptare")
+            {
+                _context.Rezervari.Remove(rezervare);
                 await _context.SaveChangesAsync();
             }
 

@@ -4,190 +4,255 @@
     ViewData["Title"] = "Profile";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                Profile Information
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    <!-- Email (Always visible for all roles) -->
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="text" class="form-control" value="@Model.CurrentUser.UserName" readonly />
-                    </div>
+    .card {
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
 
-                    <!-- User Id (Always visible for all roles) -->
-                    <div class="form-group">
-                        <label>User ID</label>
-                        <input type="text" class="form-control" value="@Model.CurrentUser.Id" readonly />
-                    </div>
+    .card-header {
+        background-color: #fff8e1;
+        color: black;
+        font-weight: bold;
+        font-size: 1.2em;
+        border-bottom: 1px solid #ddd;
+    }
 
-                    @if (Model.CurrentRole == "Sofer")
-                    {
-                        <!-- Sofer Information: Nume, Prenume, Telefon -->
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: black;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        background-color: #fff;
+        color: black;
+    }
+
+    .btn-primary, .btn-success, .btn-danger {
+        background-color: #fff8e1;
+        border-color: #fff8e1;
+        color: black;
+        font-weight: bold;
+    }
+
+        .btn-primary:hover, .btn-success:hover, .btn-danger:hover {
+            background-color: #f7d10c;
+            border-color: #f7d10c;
+        }
+
+    .list-group-item {
+        background-color: #fff;
+        color: black;
+        border: none;
+        padding: 10px;
+    }
+
+    .alert-warning {
+        background-color: #ffecb3;
+        color: black;
+        font-weight: bold;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+</style>
+
+<br />
+
+<div class="container">
+    <div class="row" style="max-width:75%;">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Informatii profil
+                </div>
+                <div class="card-body">
+                    <form method="post">
                         <div class="form-group">
-                            <label>Nume</label>
-                            <input type="text" class="form-control" asp-for="Nume" />
+                            <label>Email</label>
+                            <input type="text" class="form-control" value="@Model.CurrentUser.UserName" readonly />
                         </div>
+
                         <div class="form-group">
-                            <label>Prenume</label>
-                            <input type="text" class="form-control" asp-for="Prenume" />
+                            <label>User ID</label>
+                            <input type="text" class="form-control" value="@Model.CurrentUser.Id" readonly />
                         </div>
-                        <div class="form-group">
-                            <label>Telefon</label>
-                            <input type="text" class="form-control" asp-for="Telefon" />
-                        </div>
-                        @if (Model.CurrentCar == null)
+
+                        @if (Model.CurrentRole == "Sofer")
                         {
                             <div class="form-group">
-                                <label>Select Car</label>
-                                <select class="form-control" asp-for="CarId">
-                                    <option value="">Select a car</option>
-                                    @foreach (var car in Model.Cars)
-                                    {
-                                        <option value="@car.Id">@car.Marca @car.Model</option>
-                                    }
-                                </select>
+                                <label>Nume</label>
+                                <input type="text" class="form-control" asp-for="Nume" />
                             </div>
+                            <div class="form-group">
+                                <label>Prenume</label>
+                                <input type="text" class="form-control" asp-for="Prenume" />
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="text" class="form-control" asp-for="Telefon" />
+                            </div>
+                            @if (Model.CurrentCar == null)
+                            {
+                                <div class="form-group">
+                                    <label>Select Car</label>
+                                    <select class="form-control" asp-for="CarId">
+                                        <option value="">Select a car</option>
+                                        @foreach (var car in Model.Cars)
+                                        {
+                                            <option value="@car.Id">@car.Marca @car.Model</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                            <br />
+                            <button type="submit" class="btn btn-login">Salveaza modificarile</button>
                         }
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    }
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-@if (Model.CurrentRole == "Sofer")
-{
-    @if (Model.CurrentCar != null)
-    {
-        <div class="card mt-3">
-            <div class="card-header">
-                Assigned Car Information
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <img src="~/Images/@Model.CurrentCar.imagine1" alt="Car Image 1" class="img-fluid" height="150px" width="250px"/>
-                        <img src="~/Images/@Model.CurrentCar.imagine2" alt="Car Image 1" class="img-fluid" height="150px" width="250px"/>
-                    </div>
-                    <div class="col-md-6">
-                        <ul class="list-group">
-                            <li class="list-group-item"><strong>Marca:</strong> @Model.CurrentCar.Marca</li>
-                            <li class="list-group-item"><strong>Model:</strong> @Model.CurrentCar.Model</li>
-                            <li class="list-group-item"><strong>An Fabricatie:</strong> @Model.CurrentCar.AnFabricatie</li>
-                            <li class="list-group-item"><strong>Numar Inmatriculare:</strong> @Model.CurrentCar.NumarInmatriculare</li>
-                            <li class="list-group-item"><strong>Pret per Km:</strong> @Model.CurrentCar.PretPerKm RON</li>
-                        </ul>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-    }
-    @if (Model.CurrentCar == null)
-    {
-        <div class="alert alert-warning">
-            You have not been assigned a car yet.
-        </div>
-    }
-
-}
-
-<!-- Display My Reservations for Client or Sofer -->
-<div class="card mt-3">
-    <div class="card-header">
-        My Reservations
     </div>
-    <div class="card-body">
-        @if (Model.Reservations.Any())
+
+    @if (Model.CurrentRole == "Sofer")
+    {
+        @if (Model.CurrentCar != null)
         {
-            <ul class="list-group">
-                @foreach (var reservation in Model.Reservations)
-                {
-                    <li class="list-group-item">
-                        <strong> ID rezervare:</strong> @reservation.Id
-                        <br />
-                        <strong>Data efectuare comanda:</strong> @reservation.DataRezervare
-                        <br />
-                        <strong>Locatie plecare:</strong> @reservation.LocatiePlecare
-                        <br />
-                        <strong>Locatie sosire:</strong> @reservation.LocatieSosire
-                        <br />
-                        <strong>Distanta cursa:</strong> @reservation.DistantaTotala km
-                        <br />
-                        <strong>Pret total:</strong> @reservation.PretTotal RON
-                        <br />
-                        <strong>Status:</strong> @reservation.Status
-                        <br />
-                        <!-- Actions for Sofer -->
-                        @if (Model.CurrentRole == "Sofer" && reservation.Status == "In asteptare")
-                        {
-                            <form method="post" asp-page-handler="AcceptRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
-                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                            </form>
-                            <form method="post" asp-page-handler="DeclineRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-sm">Decline</button>
-                            </form>
-                        }
-                    </li>
-
-
-
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h5>@reservation.Sofer.Masina.Marca @reservation.Sofer.Masina.Model</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img src="/images/@reservation.Sofer.Masina.imagine1" class="img-fluid mb-2" alt="Car Image 1" height="150px" width="250px" />
-                                    @if (!string.IsNullOrEmpty(@reservation.Sofer.Masina.imagine2))
-                                    {
-                                        <img src="/images/@reservation.Sofer.Masina.imagine2" class="img-fluid" alt="Car Image 2" height="150px" width="250px" />
-                                    }
-                                </div>
-                                <p><strong>An fabricatie:</strong> @reservation.Sofer.Masina.AnFabricatie</p>
-                                <p><strong>Numar inmatriculare:</strong> @reservation.Sofer.Masina.NumarInmatriculare</p>
-                                <p><strong>Pret per km:</strong> @reservation.Sofer.Masina.PretPerKm RON</p>
-
-                                @if (@reservation.Sofer.Masina.PreluataDeSofer == true)
-                                {
-                                    <hr />
-                                    <h4><b>Detalii sofer</b></h4>
-                                    <p><strong>Nume:</strong> @reservation.Sofer.Nume</p>
-                                    <p><strong>Prenume:</strong> @reservation.Sofer.Prenume</p>
-                                    <p><strong>Telefon:</strong> @reservation.Sofer.Telefon</p>
-                                    <p><strong>Email:</strong> @reservation.Sofer.Email</p>
-                                    <img src="/images/@reservation.Sofer.PozaProfil" class="img-fluid" alt="Profile picture" height="100px" width="100px" />
-                                }
-                                else
-                                {
-                                    <p><strong>Sofer:</strong> Not assigned</p>
-                                }
-
-                            </div>
+            <div class="card mt-3">
+                <div class="card-header">
+                    Informatii despre masina
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="~/Images/@Model.CurrentCar.imagine1" alt="Car Image 1" class="img-fluid" height="150px" width="250px" />
+                            <img src="~/Images/@Model.CurrentCar.imagine2" alt="Car Image 1" class="img-fluid" height="150px" width="250px" />
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Marca:</strong> @Model.CurrentCar.Marca</li>
+                                <li class="list-group-item"><strong>Model:</strong> @Model.CurrentCar.Model</li>
+                                <li class="list-group-item"><strong>An Fabricatie:</strong> @Model.CurrentCar.AnFabricatie</li>
+                                <li class="list-group-item"><strong>Numar Inmatriculare:</strong> @Model.CurrentCar.NumarInmatriculare</li>
+                                <li class="list-group-item"><strong>Pret per Km:</strong> @Model.CurrentCar.PretPerKm RON</li>
+                            </ul>
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
-
-                }
-            </ul>
+                </div>
+            </div>
         }
-        else
+        @if (Model.CurrentCar == null)
         {
-            <p>No reservations found.</p>
+            <div class="alert alert-warning">
+                Nu ti-ai ales nici o masina!
+            </div>
         }
+    }
+
+    <div class="card mt-3">
+        <div class="card-header">
+            Rezervarile mele
+        </div>
+        <div class="card-body">
+            @if (Model.Reservations.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var reservation in Model.Reservations)
+                    {
+                        <li class="list-group-item">
+                            <strong> ID rezervare:</strong> @reservation.Id
+                            <br />
+                            <strong>Data efectuare comanda:</strong> @reservation.DataRezervare
+                            <br />
+                            <strong>Locatie plecare:</strong> @reservation.LocatiePlecare
+                            <br />
+                            <strong>Locatie sosire:</strong> @reservation.LocatieSosire
+                            <br />
+                            <strong>Distanta cursa:</strong> @reservation.DistantaTotala km
+                            <br />
+                            <strong>Pret total:</strong> @reservation.PretTotal RON
+                            <br />
+                            <strong>Status:</strong> @reservation.Status
+                            <br />
+                            @if (Model.CurrentRole == "Sofer" && reservation.Status == "In asteptare")
+                            {
+                                <form method="post" asp-page-handler="AcceptRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                </form>
+                                <form method="post" asp-page-handler="DeclineRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Decline</button>
+                                </form>
+                                <form method="post" asp-page-handler="DeleteRide" asp-route-rezervareId="@reservation.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            }
+                        </li>
+
+                        @if (reservation.Sofer.Masina.Id != null && Model.CurrentRole == "Client")
+                        {
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    Informatii despre autovehicul
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <img src="~/Images/@reservation.Sofer.Masina.imagine1" alt="Car Image 1" class="img-fluid" height="150px" width="250px" />
+                                            <img src="~/Images/@reservation.Sofer.Masina.imagine2" alt="Car Image 1" class="img-fluid" height="150px" width="250px" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="list-group">
+                                                <li class="list-group-item"><strong>Marca:</strong> @reservation.Sofer.Masina.Marca</li>
+                                                <li class="list-group-item"><strong>Model:</strong> @reservation.Sofer.Masina.Model</li>
+                                                <li class="list-group-item"><strong>An Fabricatie:</strong> @reservation.Sofer.Masina.AnFabricatie</li>
+                                                <li class="list-group-item"><strong>Numar Inmatriculare:</strong> @reservation.Sofer.Masina.NumarInmatriculare</li>
+                                                <li class="list-group-item"><strong>Pret per Km:</strong> @reservation.Sofer.Masina.PretPerKm RON</li>
+                                            </ul>
+                                        </div>
+
+                                        @if (@reservation.Sofer.Masina.PreluataDeSofer == true)
+                                        {
+                                            <hr />
+                                            <h4><b>Detalii sofer</b></h4>
+                                            <p><strong>Nume:</strong> @reservation.Sofer.Nume</p>
+                                            <p><strong>Prenume:</strong> @reservation.Sofer.Prenume</p>
+                                            <p><strong>Telefon:</strong> @reservation.Sofer.Telefon</p>
+                                            <p><strong>Email:</strong> @reservation.Sofer.Email</p>
+                                            <div>
+                                                <img src="/images/@reservation.Sofer.PozaProfil" class="" alt="Profile picture" height="100px" width="100px" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p><strong>Sofer:</strong> Not assigned</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No reservations found.</p>
+            }
+        </div>
     </div>
 </div>

@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext _context
+@inject Microsoft.AspNetCore.Identity.UserManager<IdentityUser> _userManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,84 +12,177 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MIPC_Web.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .navbar {
+            background-color: #fff8e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-link {
+            color: #555 !important;
+        }
+
+            .nav-link:hover {
+                color: #fbc02d !important;
+            }
+
+        .btn-login {
+            background-color: #fbc02d;
+            color: #fff;
+        }
+
+        .btn-register {
+            background-color: #1976d2;
+            color: #fff;
+        }
+
+        .notification-icon {
+            position: relative;
+            font-size: 50px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            padding: 3px 6px;
+            font-size: 12px;
+        }
+        .navbar-brand img {
+        height: 100px;
+        max-height: 100%;
+        }
+
+        .custom-nav .nav-link {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            font-weight: 600;
+            color: black;
+        }
+
+            .custom-nav .nav-link:hover {
+                color: #f0ad4e;
+            }
+
+        .custom-nav .nav-item {
+            margin-right: 1rem;
+        }
+
+    }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">MIPC_Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <img src="~/images/logo.png" alt="MIPC Logo">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto custom-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-page="/Index"><strong>Acasă</strong></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/AllCars">Plan your trip</a>
+                            <a class="nav-link" asp-area="" asp-page="/AllCars"><strong>Planifică o rezervare</strong></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Dashboard">Admin dashboard</a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Admin/Dashboard"><strong>Admin dashboard</strong></a>
+                            </li>
+                        }
                     </ul>
-                </div>
 
-                <div>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <p>Welcome, @User.Identity.Name!</p>
-                        
-                        @if (User.IsInRole("Client"))
+                    <div class="d-flex align-items-center custom-nav">
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <p>You are logged in as: Client</p>
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
-                        }
-                        else if (User.IsInRole("Admin"))
-                        {
-                            <p>You are logged in as: Admin</p>
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
+                            <span class="me-3">Salut, @User.Identity.Name!
+                            <br />
+                            Esti logat ca si @(User.IsInRole("Admin") ? "Admin" : User.IsInRole("Client") ? "Client" : "Sofer")</span>
+                            <a class="nav-link" asp-area="" asp-page="/Profile"><strong>Profilul meu</strong></a>
 
-                        }
-                        else if (User.IsInRole("Sofer"))
-                        {
-                            <p>You are logged in as: Sofer</p>
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Profile">View your account</a>
+                            <a class="nav-link notification-icon" asp-area="" asp-page="/Notifications">
+                                <i class="fas fa-bell"></i>
+                                 
+                                @{
+                                    var user = await _userManager.GetUserAsync(User);
+                                    if (user != null)
+                                    {
+                                        var unreadCount = await _context.Notificari
+                                        .Where(n => n.UserId == user.Id && n.Status == "Necitita")
+                                        .CountAsync();
+                                        <span class="notification-badge">@unreadCount</span>
+                                    }
+                                    else
+                                    {
+                                        @:0
+                                    }
+                                }
 
+
+                            </a>
+                            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" class="form-inline">
+                                <button type="submit" class="btn btn-login ms-3">Logout</button>
+                            </form>
                         }
                         else
                         {
-                            <p>You are logged in with an unknown role</p>
-
+                            <a href="/Identity/Account/Login" class="btn btn-login me-2" style="color:white">Login</a>
+                            <a href="/Identity/Account/Register" class="btn btn-register" style="color:white">Register</a>
                         }
-
-
-                        <a href="/Identity/Account/Logout" class="btn btn-secondary" style="color: white;">Logout</a>
-                    }
-                    else
-                    {
-                        <p>
-                            <a href="/Identity/Account/Login" class="btn btn-primary">Login</a>
-                            <a href="/Identity/Account/Register" class="btn btn-secondary" style="color: white;">Register</a>
-                        </p>
-                    }
+                    </div>
                 </div>
-
             </div>
         </nav>
     </header>
+
+
+
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - MIPC_Web - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="footer-custom border-top footer text-muted">
+        <div class="container custom-nav">
+            &copy; 2024 - Medii de programare si dezvoltare | IE an 3 - Moldoveanu Iustin & Pilanciu Cecilia
         </div>
     </footer>
+
+    <style>
+        .footer-custom {
+            background-color: #fff8e1;
+            color: #ffffff;
+        }
+
+            .footer-custom a {
+                color: #ffffff;
+            }
+
+                .footer-custom a:hover {
+                    color: #fff8e1;
+                }
+    </style>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

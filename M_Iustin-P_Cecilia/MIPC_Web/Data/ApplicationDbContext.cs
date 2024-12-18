@@ -10,7 +10,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Firma> Firme { get; set; }
     public DbSet<Masina> Masini { get; set; }
     public DbSet<Sofer> Soferi { get; set; }
-    public DbSet<Client> Clienti { get; set; }
+    public DbSet<Notificare> Notificari { get; set; }
     public DbSet<Rezervare> Rezervari { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

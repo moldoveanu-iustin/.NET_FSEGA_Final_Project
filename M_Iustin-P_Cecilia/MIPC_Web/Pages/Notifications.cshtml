@@ -1,0 +1,66 @@
+﻿@page
+@model NotificationsModel
+@{
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-dark">Notificarile tale</h1>
+
+    @if (Model.Notifications != null && Model.Notifications.Any())
+    {
+        <ul class="list-group">
+            @foreach (var notificare in Model.Notifications)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 rounded-3 my-2 notification-item @(notificare.Status == "Necitita" ? "bg-gray" : "bg-green")">
+                    <div class="notification-content">
+                        <strong class="text-dark">@notificare.Descriere</strong>
+                        <small class="text-muted d-block">@notificare.Status</small>
+                        <small class="text-muted d-block">Notificare trimisa la: @notificare.OraTrimitere</small>
+                    </div>
+                    <div class="notification-actions">
+                        <form asp-page="/Notifications" asp-page-handler="MarkAsRead" asp-route-notificationId="@notificare.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-link btn-sm text-warning">Mark as Read</button>
+                        </form>
+                        <form asp-page="/Notifications" asp-page-handler="MarkAsUnRead" asp-route-notificationId="@notificare.Id" method="post" class="d-inline ml-2">
+                            <button type="submit" class="btn btn-link btn-sm text-warning">Mark as Unread</button>
+                        </form>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-center text-muted">Nu exista notificari in acest moment.</p>
+    }
+</div>
+
+<style>
+    .notification-item {
+        background-color: #fff;
+        border: 2px solid #f7c603;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+
+    .bg-gray {
+        background-color:#F4E47E;
+    }
+
+    .bg-green {
+        background-color: #d3d3d3;
+        color: white;
+    }
+
+    .btn-link {
+        color: #f7c603;
+        font-weight: bold;
+    }
+
+        .btn-link:hover {
+            color: #d29f01;
+            text-decoration: underline;
+        }
+</style>

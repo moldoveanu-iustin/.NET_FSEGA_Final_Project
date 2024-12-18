@@ -58,6 +58,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts(); // HTTP Strict Transport Security
 }
 
+builder.Services.AddHttpContextAccessor();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

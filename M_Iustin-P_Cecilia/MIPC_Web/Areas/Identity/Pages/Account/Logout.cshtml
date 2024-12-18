@@ -5,7 +5,6 @@
 }
 
 <header>
-    <h1>@ViewData["Title"]</h1>
     @{
         if (User.Identity?.IsAuthenticated ?? false)
         {
@@ -19,3 +18,60 @@
         }
     }
 </header>
+
+<style>
+    body {
+        background-color: #fff8e1;
+        color: black;
+    }
+
+    h1, h2 {
+        color: black;
+    }
+
+    .login-container {
+        background-color: white;
+        border: 2px solid #ffd700;
+        border-radius: 10px;
+        padding: 30px;
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control {
+        border: 1px solid #ffd700;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .btn-yellow {
+        background-color: #ffd700;
+        color: white;
+        border-color: #ffd700;
+    }
+
+        .btn-yellow:hover {
+            background-color: #e6c200;
+            border-color: #e6c200;
+        }
+
+    .checkbox .form-check-input {
+        accent-color: #ffd700;
+    }
+
+    .text-center a {
+        color: #ffd700;
+    }
+
+        .text-center a:hover {
+            color: #e6c200;
+        }
+
+    hr {
+        border-top: 2px solid #ffd700;
+    }
+</style>

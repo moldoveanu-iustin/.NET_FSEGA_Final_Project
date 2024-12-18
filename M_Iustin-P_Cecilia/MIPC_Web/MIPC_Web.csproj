@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Client.cs" />
     <Compile Remove="Models\Utilizator.cs" />
   </ItemGroup>
 
